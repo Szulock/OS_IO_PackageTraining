@@ -18,6 +18,7 @@ var task1Writer widget.Editor
 var task2Button widget.Clickable
 var task3Writer widget.Editor
 var task4Writer widget.Editor
+var task5Writer widget.Editor
 
 type AppState struct {
 	currentInterface func(th *material.Theme, gtx C) D
@@ -157,6 +158,30 @@ func funcionalitiestaskfourth(gtx C) {
 	}
 }
 
+func funcionalitiestaskfive(gtx C) {
+	for {
+		e, ok := gtx.Event(
+			key.Filter{
+				Focus: &task5Writer,
+				Name:  key.NameReturn,
+			},
+		)
+		if !ok {
+			break
+		}
+		ev, ok := e.(key.Event)
+		if !ok {
+			continue
+		}
+		// Обработка нажатия Enter
+		if ev.State == key.Press && ev.Name == key.NameReturn {
+			Directory := task5Writer.Text() // Получаем текст из редактора
+			delAllTxtFile(Directory)
+
+		}
+	}
+}
+
 func writeToFile(filename, text string) error {
 	fileOpened, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -175,6 +200,7 @@ func SeeMainWindow(th *material.Theme, gtx C) D {
 	funcionalitiestaskfourth(gtx)
 	funcionalitiestaskone(gtx)
 	funcionalitiestaskThree(gtx)
+	funcionalitiestaskfive(gtx)
 	return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 		// Первый элемент: текст и кнопка для создания файла
 		layout.Rigid(func(gtx C) D {
@@ -202,11 +228,11 @@ func SeeMainWindow(th *material.Theme, gtx C) D {
 				})
 			})
 		}),
-		layout.Rigid(func(gtx C) D {
+		layout.Rigid(func(gtx C) D { //2
 			funcionalitiestaskTwo(gtx)
 			return MakeTextAboveAndButton(th, gtx, "Копирование файла", unit.Sp(11), &task2Button, "Копировать файл Example и создать новый")
 		}),
-		layout.Rigid(func(gtx C) D {
+		layout.Rigid(func(gtx C) D { //3
 			lbl := material.Body1(th, "Проверка на наличие файла/директории: введите путь к файлу")
 			lbl.TextSize = unit.Sp(14)
 			return lbl.Layout(gtx)
@@ -233,7 +259,7 @@ func SeeMainWindow(th *material.Theme, gtx C) D {
 				})
 			})
 		}),
-		layout.Rigid(func(gtx C) D {
+		layout.Rigid(func(gtx C) D { //4 task
 			StandardInset := layout.Inset{
 				Top: unit.Dp(22),
 			}
@@ -260,6 +286,38 @@ func SeeMainWindow(th *material.Theme, gtx C) D {
 					}
 					return inset.Layout(gtx, func(gtx C) D {
 						userInput4 := material.Editor(th, &task4Writer, "Введите адрес директории")
+						return userInput4.Layout(gtx)
+					})
+				})
+			})
+		}),
+		layout.Rigid(func(gtx C) D { //5 task
+			StandardInset := layout.Inset{
+				Top: unit.Dp(22),
+			}
+			return StandardInset.Layout(gtx, func(gtx C) D {
+				lbl := material.Body1(th, "Удаление всех  txt из директории")
+				lbl.TextSize = unit.Sp(14)
+				return lbl.Layout(gtx)
+			})
+		}),
+		layout.Rigid(func(gtx C) D {
+			insetOut := layout.Inset{Top: unit.Dp(3)}
+			return insetOut.Layout(gtx, func(gtx C) D {
+				border := widget.Border{
+					Color:        color.NRGBA{R: 155, G: 55, B: 155, A: 255},
+					CornerRadius: unit.Dp(5),
+					Width:        unit.Dp(4),
+				}
+				return border.Layout(gtx, func(gtx C) D {
+					inset := layout.Inset{
+						Top:    unit.Dp(10),
+						Right:  unit.Dp(10),
+						Bottom: unit.Dp(10),
+						Left:   unit.Dp(10),
+					}
+					return inset.Layout(gtx, func(gtx C) D {
+						userInput4 := material.Editor(th, &task5Writer, "Введите адрес директории")
 						return userInput4.Layout(gtx)
 					})
 				})

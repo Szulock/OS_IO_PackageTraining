@@ -14,7 +14,7 @@ func Copyfile(OldFile, FreshFile string) {
 	}
 	defer srcFile.Close()
 
-	destFile, err := os.Create("FreshFile")
+	destFile, err := os.Create("FreshFile.txt")
 	if err != nil {
 		fmt.Println("Error creating destination file:", err)
 		return
@@ -27,5 +27,5 @@ func Copyfile(OldFile, FreshFile string) {
 		return
 	}
 
-	fmt.Printf("Copied %d bytes from Example to FreshExample\n", bytesCopied)
+	fmt.Printf("Copied %d bytes from Example to FreshExample.txt\n", bytesCopied)
 }
